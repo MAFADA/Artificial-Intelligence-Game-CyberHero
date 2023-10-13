@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f92165fd521a05f4eb60867033830759, type: 3}
+  m_Name: ItemHintBlue
+  m_EditorClassIdentifier: 
+  type: 2
+  range: {x: 5, y: 4}
+  image: {fileID: 245077511, guid: 3751e6115070d7d4aaee8d332505de06, type: 3}
+  itemName: Pengenalan Hacker
+  itemDescription: "Hacker adalah seseorang yang mampu menerobos sistem keamanan
+    komputer atau jaringan komputer berbekalkan skill pemrograman yang mumpuni. Tujuannya
+    bermacam-macam, mulai dari mengetes sistem keamanan hingga melakukan tindak kriminal.
+    \n\nTerdapat banyak jenis hacker di dunia dengan tujuan yang berbeda:\n1. Black-Hat
+    Hacker jenis hacker yang paling dikenal dan harus Anda waspadai. Black Hat Hacker
+    adalah hacker yang melakukan aktivitas ilegal. Mulai dari meretas sistem, mencuri
+    data, menyebarkan malware, memata-matai, dan masih banyak lainnya. \n2. White-Hat
+    Hacker jenis hacker ini menggunakan keahlian meretasnya untuk mengevaluasi kelemahan
+    suatu sistem. \n3. Blue-Hat Hacker hacker pihak ketiga yang bekerjasama dengan
+    perusahaan untuk menemukan titik lemah di sistemnya. \n4. Grey-Hat Hacker  jenis
+    hacker yang sering melakukan aktivitas tidak etis, tapi masih belum melanggar
+    hukum. Misalnya, sengaja meretas suatu sistem dan hanya akan diperbaiki jika
+    diberi imbalan. \n5. Red-Hat Hacker (Hacktivism) jenis hacker ini melakukan peretasan
+    karena ingin menyampaikan pesan. Entah itu ideologis, politik, sosial, atau agama. "

@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Firewall
+  - Virus
+  - Waypoint Down
+  - Waypoint Up
+  - Waypoint Right
+  - MidBoss1StageTrigger
+  - NextStageTrigger
+  - FallTrigger
+  - Ground
+  - Server
+  - Enemy
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - Player
+  - Water
+  - UI
+  - Ground
+  - Terrain
+  - Background
+  - Enemy
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 3643633805
+    locked: 0
+  - name: Ground
+    uniqueID: 3170226463
+    locked: 0
+  - name: Character
+    uniqueID: 2606720427
+    locked: 0
+  - name: Objects
+    uniqueID: 1658342523
+    locked: 0

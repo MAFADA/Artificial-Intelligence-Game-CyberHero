@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6724016874976826243
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6724016874976826241}
+  - component: {fileID: 6724016874976826242}
+  m_Layer: 0
+  m_Name: Inventory Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6724016874976826241
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6724016874976826243}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 457.3, y: 222.94032, z: 2.1600113}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6724016874976826242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6724016874976826243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 975549c8575f2d845a704bc78fac974b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxStackedItem: 5
+  inventorySlots:
+  - {fileID: 529429296383218423, guid: ba11551521dc4b94289c8dd0416d8fc5, type: 3}
+  - {fileID: 3789992645035596857, guid: 9978e8861cbae4746a468ea5273c0f97, type: 3}
+  - {fileID: 7040013851075942201, guid: 95863980c5666d04890fabd255f5d6fa, type: 3}
+  - {fileID: 2480437743718231936, guid: c58dace93c179eb4fb2495c3d938d686, type: 3}
+  - {fileID: 1368206957666867682, guid: 15611e98d655497408fc0523b20b03ac, type: 3}
+  - {fileID: 7512707846096586203, guid: 9f969c0b789762a4ba6666d66d3b9762, type: 3}
+  - {fileID: 2944057440214311686, guid: cae9dba1face4fb459991e1f5fec4822, type: 3}
+  inventoryItemPrefab: {fileID: 4350181433205086380, guid: 09343f0cc423ebc4da4927b2861a0b7b, type: 3}
