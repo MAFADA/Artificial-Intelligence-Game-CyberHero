@@ -13226,7 +13226,7 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: c3e6f053b9b883443a3670a8dc6026e1, type: 3}
     - target: {fileID: 4960594240494143979, guid: 79da84c2949675443a2f4eadb734f4ed, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_StringArgument
-      value: Prototype 1
+      value: CutsceneIntro
       objectReference: {fileID: 0}
     - target: {fileID: 4960594240494143979, guid: 79da84c2949675443a2f4eadb734f4ed, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
