@@ -64,3 +64,6 @@ TagManager:
   - name: Objects
     uniqueID: 1658342523
     locked: 0
+  - name: Buildings
+    uniqueID: 1964122973
+    locked: 0
