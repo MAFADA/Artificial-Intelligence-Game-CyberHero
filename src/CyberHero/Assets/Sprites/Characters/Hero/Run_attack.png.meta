@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2c0f27c1b20ac67489dc1c901ce0e0f8
+guid: ee8ab47bd1aa7af4ca5a82dcd1c310cd
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -137,184 +137,28 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: idle_1
+      name: Run_attack_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 64
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: acc18659f976b9b49b17def8a90e93af
-      internalID: -230085222
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: idle_2
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 64
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 707768d67fd6bc647b9ed4f3912a295c
-      internalID: 1731570326
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: idle_3
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 64
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9ba493bd3393d84448ba6336b890c521
-      internalID: 10437401
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: idle_4
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 64
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6d2803c1fab67864b937188edd92b347
-      internalID: 1123464883
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: walk_1
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 32
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ddb31a6bb592fb4498585cd460d82be7
-      internalID: 1493522129
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: walk_2
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 32
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: eb596e2cc721c0a408ba7a55c4e05eaa
-      internalID: -1867508698
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: walk_3
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 32
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fab8eb6a40779ce4dbc1a1e64e4c540f
-      internalID: 49812906
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: walk_4
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 32
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 942566d70230aeb44905c064c298df0b
-      internalID: 430532333
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: attack_1
-      rect:
-        serializedVersion: 2
-        x: 0
+        x: 3
         y: 0
-        width: 32
+        width: 25
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -323,19 +167,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3f3a574117e729d42b81f80ecdd50e3a
-      internalID: 128610032
+      spriteID: 6f906100132f162498ac8eb4c1b262f0
+      internalID: 1663718558
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: attack_2
+      name: Run_attack_1
       rect:
         serializedVersion: 2
-        x: 32
+        x: 56
         y: 0
-        width: 32
+        width: 18
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -344,20 +188,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f4b30ded496ec9a429cb74434f3b3646
-      internalID: -1849562735
+      spriteID: 23df7392d8a1f8145bf7c881b91af980
+      internalID: -154182131
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: attack_3
+      name: Run_attack_2
       rect:
         serializedVersion: 2
-        x: 64
+        x: 99
         y: 0
-        width: 32
-        height: 32
+        width: 24
+        height: 31
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -365,19 +209,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 84e1366a23f02784980fd04d9b5dedf3
-      internalID: 448284838
+      spriteID: 835e8836b19d3df4dadeaa7188d39f30
+      internalID: -427117622
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: attack_4
+      name: Run_attack_3
       rect:
         serializedVersion: 2
-        x: 96
+        x: 146
         y: 0
-        width: 32
+        width: 30
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -386,8 +230,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c327548257c5236499f3ad10756b3f33
-      internalID: -1149245349
+      spriteID: b81773582d6913044b770d85cfc58ad7
+      internalID: -401256619
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Run_attack_4
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 26
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f625c7085731299438d1f455b74e4e2d
+      internalID: -643313214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Run_attack_5
+      rect:
+        serializedVersion: 2
+        x: 243
+        y: 0
+        width: 24
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d736fedb431d1494f888ac825352ceb6
+      internalID: -1117704069
       vertices: []
       indices: 
       edges: []
@@ -403,18 +289,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      attack_1: 128610032
-      attack_2: -1849562735
-      attack_3: 448284838
-      attack_4: -1149245349
-      idle_1: -230085222
-      idle_2: 1731570326
-      idle_3: 10437401
-      idle_4: 1123464883
-      walk_1: 1493522129
-      walk_2: -1867508698
-      walk_3: 49812906
-      walk_4: 430532333
+      Run_attack_0: 1663718558
+      Run_attack_1: -154182131
+      Run_attack_2: -427117622
+      Run_attack_3: -401256619
+      Run_attack_4: -643313214
+      Run_attack_5: -1117704069
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
