@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 43405bd620230eb4994d325594c8f20b
+guid: 92940a48b8aa62641aa31dfefcc9a458
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -153,13 +153,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: dagger_run_0
+      name: Fall_0
       rect:
         serializedVersion: 2
-        x: 170
-        y: 20
-        width: 6
-        height: 11
+        x: 8
+        y: 0
+        width: 13
+        height: 38
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -167,20 +167,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 141b5c2f570bb19449b42512b6e1a82e
-      internalID: 1368450871
+      spriteID: 4da8a180348799a45b05dc02dc84e96e
+      internalID: 779602139
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: dagger_run_1
+      name: Fall_1
       rect:
         serializedVersion: 2
-        x: 6
-        y: 5
-        width: 6
-        height: 11
+        x: 55
+        y: 0
+        width: 15
+        height: 38
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -188,20 +188,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 63007db0eacba6a4ab17910620cb6a14
-      internalID: -465479072
+      spriteID: 640b1904d26b21c4c951fba93fc34fab
+      internalID: 1507287276
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: dagger_run_2
+      name: Fall_2
       rect:
         serializedVersion: 2
-        x: 68
-        y: 9
-        width: 11
-        height: 6
+        x: 99
+        y: 0
+        width: 22
+        height: 33
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -209,20 +209,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 19b8b4ab83e5e0a4ab672ebc62b6bb1a
-      internalID: 1184392569
+      spriteID: fa0fc1cec0170ea44a3b1c70fb27216e
+      internalID: -1784390428
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: dagger_run_3
+      name: Fall_3
       rect:
         serializedVersion: 2
-        x: 123
-        y: 12
-        width: 11
-        height: 6
+        x: 148
+        y: 0
+        width: 19
+        height: 34
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -230,50 +230,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ab5625e1d31190b4b9a8985c1afb3023
-      internalID: 271915673
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: dagger_run_4
-      rect:
-        serializedVersion: 2
-        x: 216
-        y: 10
-        width: 11
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1e4c3b87929f87b469b91e80b0e58221
-      internalID: -2024786703
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: dagger_run_5
-      rect:
-        serializedVersion: 2
-        x: 252
-        y: 12
-        width: 11
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 15302f135867a2344a09b3c551a0a566
-      internalID: 694406905
+      spriteID: ab6c78fa32cd6e644ac923bea19c5588
+      internalID: 463912575
       vertices: []
       indices: 
       edges: []
@@ -289,12 +247,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      dagger_run_0: 1368450871
-      dagger_run_1: -465479072
-      dagger_run_2: 1184392569
-      dagger_run_3: 271915673
-      dagger_run_4: -2024786703
-      dagger_run_5: 694406905
+      Fall_0: 779602139
+      Fall_1: 1507287276
+      Fall_2: -1784390428
+      Fall_3: 463912575
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

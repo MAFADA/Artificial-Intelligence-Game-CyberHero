@@ -26,7 +26,7 @@ TagManager:
   - Terrain
   - Background
   - Enemy
-  - 
+  - Buildings
   - 
   - 
   - 
@@ -55,15 +55,15 @@ TagManager:
   - name: Background
     uniqueID: 3643633805
     locked: 0
+  - name: Buildings
+    uniqueID: 1964122973
+    locked: 0
+  - name: Objects
+    uniqueID: 1658342523
+    locked: 0
   - name: Ground
     uniqueID: 3170226463
     locked: 0
   - name: Character
     uniqueID: 2606720427
-    locked: 0
-  - name: Objects
-    uniqueID: 1658342523
-    locked: 0
-  - name: Buildings
-    uniqueID: 1964122973
     locked: 0
