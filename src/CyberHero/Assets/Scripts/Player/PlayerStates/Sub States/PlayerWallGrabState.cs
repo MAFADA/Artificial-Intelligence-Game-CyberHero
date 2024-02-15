@@ -41,9 +41,10 @@ public class PlayerWallGrabState : PlayerTouchingWallState
     {
         base.LogicUpdate();
 
-        HoldPosition();
         if (!isExitingState)
         {
+            HoldPosition();
+
             if (yInput > 0)
             {
                 stateMachine.ChangeState(player.WallClimbState);
