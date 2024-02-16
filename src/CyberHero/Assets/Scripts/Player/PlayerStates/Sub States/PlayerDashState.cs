@@ -102,7 +102,7 @@ public class PlayerDashState : PlayerAbilityState
 
     private void PlaceAfterImage()
     {
-        // PlayerAfterImagePool.Instance.GetFromPool();
+        PlayerAfterImagePool.Instance.GetFromPool();
         lastAfterImagePos = player.transform.position;
     }
 
