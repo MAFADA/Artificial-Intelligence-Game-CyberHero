@@ -8,6 +8,7 @@ public class PlayerLedgeClimbState : PlayerState
     private Vector2 cornerPosition;
     private Vector2 startPosition;
     private Vector2 stopPosition;
+    private Vector2 workspace;
 
     private bool isHanging;
     private bool isClimbing;
@@ -38,11 +39,11 @@ public class PlayerLedgeClimbState : PlayerState
     {
         base.Enter();
 
-        player.SetVelocityZero();
+        core.Movement.SetVelocityZero();
         player.transform.position = detectedPostion;
-        cornerPosition = player.DetermineCornerPosition();
-        startPosition.Set(cornerPosition.x - (player.FacingDirection * playerData.startOffset.x), cornerPosition.y - playerData.startOffset.y);
-        stopPosition.Set(cornerPosition.x + (player.FacingDirection * playerData.stopOffset.x), cornerPosition.y + playerData.stopOffset.y);
+        cornerPosition = DetermineCornerPosition();
+        startPosition.Set(cornerPosition.x - (core.Movement.FacingDirection * playerData.startOffset.x), cornerPosition.y - playerData.startOffset.y);
+        stopPosition.Set(cornerPosition.x + (core.Movement.FacingDirection * playerData.stopOffset.x), cornerPosition.y + playerData.stopOffset.y);
 
         player.transform.position = startPosition;
     }
@@ -75,10 +76,10 @@ public class PlayerLedgeClimbState : PlayerState
             jumpInput = player.InputHandler.JumpInput;
 
 
-            player.SetVelocityZero();
+            core.Movement.SetVelocityZero();
             player.transform.position = startPosition;
 
-            if (xInput == player.FacingDirection && isHanging && !isClimbing)
+            if (xInput == core.Movement.FacingDirection && isHanging && !isClimbing)
             {
                 isClimbing = true;
                 player.Anim.SetBool("climbLedge", true);
@@ -94,6 +95,18 @@ public class PlayerLedgeClimbState : PlayerState
             }
         }
 
+    }
+
+    private Vector2 DetermineCornerPosition()
+    {
+        RaycastHit2D xHit = Physics2D.Raycast(core.CollisionSenses.WallCheck.position, Vector2.right * core.Movement.FacingDirection, core.CollisionSenses.WallCheckDistance, core.CollisionSenses.WhatIsGround);
+        float xDistance = xHit.distance;
+        workspace.Set(xDistance * core.Movement.FacingDirection, 0);
+        RaycastHit2D yHit = Physics2D.Raycast(core.CollisionSenses.LedgeCheck.position + (Vector3)(workspace), Vector2.down, core.CollisionSenses.LedgeCheck.position.y - core.CollisionSenses.WallCheck.position.y, core.CollisionSenses.WhatIsGround);
+        float yDistance = yHit.distance;
+
+        workspace.Set(core.CollisionSenses.WallCheck.position.x + (xDistance * core.Movement.FacingDirection), core.CollisionSenses.LedgeCheck.position.y - yDistance);
+        return workspace;
     }
 
 
