@@ -27,8 +27,8 @@ TagManager:
   - Background
   - Enemy
   - Buildings
-  - 
-  - 
+  - Damageable
+  - Weapon
   - 
   - 
   - 
