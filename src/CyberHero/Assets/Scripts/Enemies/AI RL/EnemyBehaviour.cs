@@ -252,10 +252,10 @@ public class EnemyAgent : Agent
         int horizontalDirection = (int)Mathf.Sign(player.position.x - transform.position.x);
         int isPlayerDetected = (Vector2.Distance(transform.position, player.position) <= detectionRadius) ? 1 : 0;
         int isPlayerInAttackRange = (Vector2.Distance(transform.position, player.position) <= attackRange) ? 1 : 0;
-        int isPlayerAttacking = player.GetComponent<Player>().GetIsAttacking() ? 1 : 0;
+        /*int isPlayerAttacking = player.GetComponent<Player>().GetIsAttacking() ? 1 : 0;*/
 
-        int stateIndex  = horizontalDirection * 4 + isPlayerDetected * 1 + isPlayerInAttackRange * 8 + isPlayerAttacking * 16;
-
+        /*int stateIndex  = horizontalDirection * 4 + isPlayerDetected * 1 + isPlayerInAttackRange * 8 + isPlayerAttacking * 16;*/
+        int stateIndex = 1;
         return stateIndex;
     }
 
@@ -386,7 +386,7 @@ public class EnemyAgent : Agent
     {
         float reward = 0f;
 
-        if (isAttacking && player.GetComponent<PlayerHealth>().IsDead())
+      /*  if (isAttacking && player.GetComponent<PlayerHealth>().IsDead())
         {
             reward = 1f;
         }
@@ -409,7 +409,7 @@ public class EnemyAgent : Agent
         else
         {
             reward = -0.05f;
-        }
+        }*/
 
         return reward;
     }
