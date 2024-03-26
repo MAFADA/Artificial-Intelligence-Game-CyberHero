@@ -9,6 +9,15 @@ public class PlayerGroundedState : PlayerState
     private bool grabInput;
     private bool dashInput;
 
+    protected Movement Movement { get => movement ?? core.GetCoreComponent(ref movement); }
+    private Movement movement;
+
+    private CollisionSenses CollisionSenses
+    {
+        get => collisionSenses ??= core.GetCoreComponent(ref collisionSenses);
+    }
+    private CollisionSenses collisionSenses;
+
     private bool isGrounded;
     private bool isTouchingWall;
     private bool isTouchingLedge;
@@ -22,9 +31,12 @@ public class PlayerGroundedState : PlayerState
     {
         base.DoChecks();
 
-        isGrounded = core.CollisionSenses.Ground;
-        isTouchingWall = core.CollisionSenses.WallFront;
-        isTouchingLedge = core.CollisionSenses.LedgeHorizontal;
+        if (CollisionSenses)
+        {
+            isGrounded = CollisionSenses.Ground;
+            isTouchingWall = CollisionSenses.WallFront;
+            isTouchingLedge = CollisionSenses.LedgeHorizontal;
+        }
     }
 
     public override void Enter()
