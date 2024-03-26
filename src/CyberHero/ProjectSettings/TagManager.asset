@@ -15,6 +15,7 @@ TagManager:
   - Ground
   - Server
   - Enemy
+  - ParticleContainer
   layers:
   - Default
   - TransparentFX
