@@ -104,4 +104,9 @@ public class Player : MonoBehaviour
     private void AnimationFinishTrigger() => StateMachine.CurrentState.AnimationFinishTrigger();
 
     #endregion
+
+    public bool GetIsAttacking()
+    {
+        return PrimaryAttackState.IsAttacking;
+    }
 }

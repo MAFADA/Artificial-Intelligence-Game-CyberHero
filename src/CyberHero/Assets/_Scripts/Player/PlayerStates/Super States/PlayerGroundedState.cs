@@ -22,10 +22,12 @@ public class PlayerGroundedState : PlayerState
     private bool isTouchingWall;
     private bool isTouchingLedge;
 
+
     public PlayerGroundedState(Player player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
     {
 
     }
+
 
     public override void DoChecks()
     {
@@ -63,6 +65,7 @@ public class PlayerGroundedState : PlayerState
         if (player.InputHandler.AttackInputs[(int)CombatInputs.primary])
         {
             stateMachine.ChangeState(player.PrimaryAttackState);
+            player.PrimaryAttackState.IsAttacking = true;
         }
         else if (player.InputHandler.AttackInputs[(int)CombatInputs.secondary])
         {

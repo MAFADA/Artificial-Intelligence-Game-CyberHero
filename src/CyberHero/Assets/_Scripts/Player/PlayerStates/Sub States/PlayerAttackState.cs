@@ -12,6 +12,10 @@ public class PlayerAttackState : PlayerAbilityState
 
     private int xInput;
 
+    //TEMPORARY
+    private bool isAttacking;
+    public bool IsAttacking { get => isAttacking; set => isAttacking = value; }
+
     public PlayerAttackState(Player player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
     {
     }

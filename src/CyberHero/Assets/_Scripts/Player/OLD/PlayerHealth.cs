@@ -56,4 +56,9 @@ public class PlayerHealth : MonoBehaviour
     public void GameOverPanel(){
         titleTextGameOver.text = "Health pointmu habis!\nWaspada terhadap serangan dari musuh.";
     }
+
+    public bool IsDead()
+    {
+        return currentHealth < maxHealth;
+    }
 }
