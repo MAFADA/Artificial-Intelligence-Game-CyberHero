@@ -30,7 +30,7 @@ public class Combat : CoreComponent, IDamageable, IKnockbackable
     {
         Debug.Log(core.transform.parent.name + "Damaged");
         Stats?.DecreaseHealth(amount);
-        ParticleManager?.StartParticlesWithRandomRotation(damageParticles);
+        //ParticleManager?.StartParticlesWithRandomRotation(damageParticles);
     }
 
     public void Knockback(Vector2 angle, float strength, int direction)

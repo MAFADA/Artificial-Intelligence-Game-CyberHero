@@ -1,12 +1,29 @@
-using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 using Unity.MLAgents;
-using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
+using Unity.MLAgents.Sensors;
+using UnityEngine;
 
 public class EnemyAgent : Agent
 {
+    #region Cores
+    public Core Core { get; private set; }
+
+    protected Movement Movement { get => movement ?? Core.GetCoreComponent(ref movement); }
+    private Movement movement;
+
+    private CollisionSenses CollisionSenses
+    {
+        get => collisionSenses ??= Core.GetCoreComponent(ref collisionSenses);
+    }
+    private CollisionSenses collisionSenses;
+    #endregion
+
+    #region Enemy Data
     public Transform player;
     public float detectionRadius = 10f;
+    public float closeRange = 2f;
     public float attackRange = 2f;
     public float attackDamage = 10f;
     public float skillDamage = 20f;
@@ -16,19 +33,38 @@ public class EnemyAgent : Agent
     public float patrolDuration = 10f;
     public float moveSpeed = 2f;
     public float rotationSpeed = 100f;
+    public int facingDirection;
 
+    public Transform firePoint;
+    public GameObject bulletPrefab;
+    #endregion
+
+    #region Components
     private Rigidbody2D rb;
+    private Animator anim;
+    #endregion
+
     private Vector2 workspace;
+
+    #region Timer Variables
     private float attackTimer = 0f;
     private float skillTimer = 0f;
     private float dodgeTimer = 0f;
     private float patrolTimer = 0f;
+    #endregion
+
     private Vector3 patrolTarget;
+
+    #region Check Variables
     private bool isFollowing = false;
     private bool isAttacking = false;
     private bool isSkilling = false;
     private bool isDodging = false;
+    private bool isGrounded;
+    private bool isWallDetected;
+    #endregion
 
+    #region Q-Learning Variables
     private int[,] QTable;
     private int currentState;
     private int nextState;
@@ -36,21 +72,48 @@ public class EnemyAgent : Agent
     private float maxFutureQ;
     private float learningRate = 0.1f;
     private float discountFactor = 0.95f;
+    #endregion
 
+    #region Unity Callbacks
+    private void Awake()
+    {
+        Core = GetComponentInChildren<Core>();
+        anim = GetComponent<Animator>();
+    }
+
+    private void Start()
+    {
+        facingDirection = 1;
+    }
+
+    private void Update()
+    {
+        Core.LogicUpdate();
+    }
+    #endregion
+
+    #region MLAgent Callbacks
     public override void Initialize()
     {
         rb = GetComponent<Rigidbody2D>();
-        SetResetParameters();
+        //SetResetParameters();
 
         // Initialize Q-Table with zeros
-        QTable = new int[16, 5];
-        for (int i = 0; i < 16; i++)
+        QTable = new int[12, 5];
+        for (int i = 0; i < 12; i++)
         {
             for (int j = 0; j < 5; j++)
             {
                 QTable[i, j] = 0;
             }
         }
+    }
+
+    public override void OnEpisodeBegin()
+    {
+        base.OnEpisodeBegin();
+
+        SetResetParameters();
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -70,6 +133,7 @@ public class EnemyAgent : Agent
     public override void OnActionReceived(ActionBuffers actions)
     {
         int horizontalMovement = (int)actions.ContinuousActions[0];
+        //int horizontalMovement = actions.DiscreteActions[4];
         int followPlayer = actions.DiscreteActions[0];
         int attackPlayer = actions.DiscreteActions[1];
         int useSkill = actions.DiscreteActions[2];
@@ -82,7 +146,7 @@ public class EnemyAgent : Agent
         int actionIndex = ChooseAction(stateIndex);
 
         // Perform action
-        /*PerformAction(horizontalMovement, followPlayer, attackPlayer, useSkill, dodgePlayerAttack);
+        /* PerformAction(horizontalMovement, followPlayer, attackPlayer, useSkill, dodgePlayerAttack);
 
         // Get next state, reward, and max future Q-Value
         nextState = GetStateIndex();
@@ -93,20 +157,29 @@ public class EnemyAgent : Agent
         float newQ = (1 - learningRate) * QTable[stateIndex, actionIndex] + learningRate * (reward + discountFactor * maxFutureQ);
         QTable[stateIndex, actionIndex] = (int)newQ;*/
 
-
+        #region Test Action
+        // TODO : Idle Anim, Idle time
         if (horizontalMovement == 1)
         {
-            /* rb.AddForce(new Vector2(moveSpeed * 1 * Time.deltaTime, 0f));*/
-            workspace.Set(moveSpeed, rb.velocity.y);
-            rb.velocity = workspace;
-        }
-        else if (horizontalMovement == -1)
-        {
-            /*rb.AddForce(new Vector2(moveSpeed * -1 * Time.deltaTime, 0f));*/
-            workspace.Set(-moveSpeed, rb.velocity.y);
-            rb.velocity = workspace;
+            isGrounded = CollisionSenses.Ground;
+            isWallDetected = CollisionSenses.WallFront;
+
+            if (!isGrounded || isWallDetected)
+            {
+                anim.SetBool("movement", false);
+                Flip();
+            }
+            else
+            {
+                anim.SetBool("movement", true);
+                workspace.Set(moveSpeed * facingDirection, rb.velocity.y);
+                rb.velocity = workspace;
+            }
+
         }
 
+
+        // TODO: IDLE Anim n Time
         if (followPlayer == 1 && !isFollowing)
         {
             isFollowing = true;
@@ -118,13 +191,20 @@ public class EnemyAgent : Agent
         if (isFollowing)
         {
             Debug.Log("FOLLOW PLAYER");
+            Debug.Log(isFollowing);
+
             Vector2 moveDirection = (player.position - transform.position).normalized;
-            rb.AddForce(moveDirection * moveSpeed);
+            float distance = Vector2.Distance(transform.position, player.transform.position);
 
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            if (distance < detectionRadius && distance > closeRange)
+            {
+                workspace.Set(moveDirection.x * moveSpeed, rb.velocity.y);
+                rb.velocity = workspace;
 
-            if (Vector2.Distance(transform.position, player.position) <= attackRange)
+                Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            }
+            else if (distance <= attackRange)
             {
                 isFollowing = false;
                 isAttacking = true;
@@ -133,40 +213,29 @@ public class EnemyAgent : Agent
             }
         }
 
+        // TODO ATTACK LOGIC, ANIM ATTACK, BULLET DAMAGE DONE
         if (attackPlayer == 1 && !isAttacking)
         {
+            Debug.Log("Attacking Player");
             isAttacking = true;
             isFollowing = false;
             isSkilling = false;
             isDodging = false;
 
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, attackRange);
-            foreach (Collider2D hitCollider in hitColliders)
-            {
-                if (hitCollider.gameObject == player.gameObject)
-                {
-                    /*player.GetComponent<Health>().TakeDamage(attackDamage);*/
-                    break;
-                }
-            }
+            Shoot();
         }
 
+        // TODO: LASER SKILL
         if (useSkill == 1 && !isSkilling)
         {
-            isSkilling = true;
-            isFollowing = false;
-            isAttacking = false;
-            isDodging = false;
+            Debug.Log("Skill Used");
 
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, attackRange);
-            foreach (Collider2D hitCollider in hitColliders)
-            {
-                if (hitCollider.gameObject == player.gameObject)
-                {
-                    /*player.GetComponent<Health>().TakeDamage(skillDamage);*/
-                    break;
-                }
-            }
+             isSkilling = true;
+             isFollowing = false;
+             isAttacking = false;
+             isDodging = false;
+
+            
         }
 
         if (dodgePlayerAttack == 1 && !isDodging)
@@ -178,6 +247,7 @@ public class EnemyAgent : Agent
 
             rb.AddForce(new Vector2(horizontalMovement * moveSpeed * 2f, rb.velocity.y));
         }
+        #endregion
 
         // Reset timers andflags
         if (attackPlayer == 1)
@@ -213,38 +283,58 @@ public class EnemyAgent : Agent
 
     public override void Heuristic(in ActionBuffers actionsOut)
     {
-        base.Heuristic(actionsOut);
 
         var continuousActionsOut = actionsOut.ContinuousActions;
 
         // Horizontal movement
         continuousActionsOut[0] = Input.GetAxisRaw("Horizontal");
 
+
+        #region DiscreteActions
         var discreteActionsOut = actionsOut.DiscreteActions;
 
         // Follow player
         if (Input.GetKeyDown(KeyCode.F))
         {
             discreteActionsOut[0] = 1;
+            Debug.Log(discreteActionsOut[0]);
         }
 
-        // Attack player
-        if (Input.GetKeyDown(KeyCode.K))
+        // Attack
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             discreteActionsOut[1] = 1;
         }
 
-        // Use skill
+        // Skill
         if (Input.GetKeyDown(KeyCode.P))
         {
             discreteActionsOut[2] = 1;
         }
 
-        // Dodge player attack
+        // Dodge
         if (Input.GetKeyDown(KeyCode.O))
         {
             discreteActionsOut[3] = 1;
         }
+
+        #endregion
+
+    }
+
+    #endregion
+
+    #region Other Functions
+
+    private void Shoot()
+    {
+        Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+    }
+
+    private void Flip()
+    {
+        facingDirection *= -1;
+        transform.Rotate(.0f, 180.0f, .0f);
     }
 
     private int GetStateIndex()
@@ -252,10 +342,11 @@ public class EnemyAgent : Agent
         int horizontalDirection = (int)Mathf.Sign(player.position.x - transform.position.x);
         int isPlayerDetected = (Vector2.Distance(transform.position, player.position) <= detectionRadius) ? 1 : 0;
         int isPlayerInAttackRange = (Vector2.Distance(transform.position, player.position) <= attackRange) ? 1 : 0;
-        /*int isPlayerAttacking = player.GetComponent<Player>().GetIsAttacking() ? 1 : 0;*/
+        int isPlayerAttacking = player.GetComponent<Player>().GetIsAttacking() ? 1 : 0;
 
-        /*int stateIndex  = horizontalDirection * 4 + isPlayerDetected * 1 + isPlayerInAttackRange * 8 + isPlayerAttacking * 16;*/
-        int stateIndex = 1;
+
+        int stateIndex = horizontalDirection * 3 + isPlayerDetected * 1 + isPlayerInAttackRange * 4 + isPlayerAttacking * 8;
+
         return stateIndex;
     }
 
@@ -264,31 +355,30 @@ public class EnemyAgent : Agent
         int[] possibleActions = new int[5];
         int actionIndex = 0;
 
-        if (stateIndex == 0 || stateIndex == 1 || stateIndex == 2 || stateIndex == 3)
+        if (stateIndex == 0 || stateIndex == 1 || stateIndex == 2)
         {
             possibleActions[actionIndex] = 0;
             actionIndex++;
         }
 
-        if (stateIndex == 8 || stateIndex == 9 || stateIndex == 10 || stateIndex == 11)
+        if (stateIndex == 4 || stateIndex == 5 || stateIndex == 6 || stateIndex == 7)
         {
             possibleActions[actionIndex] = 1;
             actionIndex++;
         }
 
-        if (stateIndex == 1 || stateIndex == 3 || stateIndex == 9 || stateIndex == 11)
+        if (stateIndex == 1 || stateIndex == 2 || stateIndex == 5 || stateIndex == 6)
         {
             possibleActions[actionIndex] = 2;
             actionIndex++;
         }
-
-        if (stateIndex == 0 || stateIndex == 2 || stateIndex == 8 || stateIndex == 10)
+        if (stateIndex == 0 || stateIndex == 2 || stateIndex == 4 || stateIndex == 6)
         {
             possibleActions[actionIndex] = 3;
             actionIndex++;
         }
 
-        if (stateIndex == 12 || stateIndex == 13 || stateIndex == 14 || stateIndex == 15)
+        if (stateIndex == 8 || stateIndex == 9 || stateIndex == 10)
         {
             possibleActions[actionIndex] = 4;
             actionIndex++;
@@ -301,15 +391,30 @@ public class EnemyAgent : Agent
 
     private void PerformAction(int horizontalMovement, int followPlayer, int attackPlayer, int useSkill, int dodgePlayerAttack)
     {
+        
+        // TODO : Idle Anim, Idle time
         if (horizontalMovement == 1)
         {
-            rb.AddForce(new Vector2(moveSpeed, 0f));
-        }
-        else if (horizontalMovement == -1)
-        {
-            rb.AddForce(new Vector2(-moveSpeed, 0f));
+            isGrounded = CollisionSenses.Ground;
+            isWallDetected = CollisionSenses.WallFront;
+
+            if (!isGrounded || isWallDetected)
+            {
+                anim.SetBool("movement", false);
+                Flip();
+            }
+            else
+            {
+                anim.SetBool("movement", true);
+                workspace.Set(moveSpeed * facingDirection, rb.velocity.y);
+                rb.velocity = workspace;
+            }
+
         }
 
+
+        // FOLLOW PLAYER LOGIC DONE
+        // TODO: IDLE Anim n Time
         if (followPlayer == 1 && !isFollowing)
         {
             isFollowing = true;
@@ -320,13 +425,21 @@ public class EnemyAgent : Agent
 
         if (isFollowing)
         {
+            Debug.Log("FOLLOW PLAYER");
+            Debug.Log(isFollowing);
+
             Vector2 moveDirection = (player.position - transform.position).normalized;
-            rb.AddForce(moveDirection * moveSpeed);
+            float distance = Vector2.Distance(transform.position, player.transform.position);
 
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            if (distance < detectionRadius && distance > closeRange)
+            {
+                workspace.Set(moveDirection.x * moveSpeed, rb.velocity.y);
+                rb.velocity = workspace;
 
-            if (Vector2.Distance(transform.position, player.position) <= attackRange)
+                Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            }
+            else if (distance <= attackRange)
             {
                 isFollowing = false;
                 isAttacking = true;
@@ -335,40 +448,36 @@ public class EnemyAgent : Agent
             }
         }
 
+        // TODO ATTACK LOGIC, ANIM ATTACK, BULLET DAMAGE DONE
         if (attackPlayer == 1 && !isAttacking)
         {
+            Debug.Log("Attacking Player");
             isAttacking = true;
             isFollowing = false;
             isSkilling = false;
             isDodging = false;
 
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, attackRange);
-            foreach (Collider2D hitCollider in hitColliders)
-            {
-                if (hitCollider.gameObject == player.gameObject)
-                {
-                    /*player.GetComponent<Health>().TakeDamage(attackDamage);*/
-                    break;
-                }
-            }
+            Shoot();
         }
 
         if (useSkill == 1 && !isSkilling)
         {
-            isSkilling = true;
-            isFollowing = false;
-            isAttacking = false;
-            isDodging = false;
+            Debug.Log("Skill Used");
 
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, attackRange);
-            foreach (Collider2D hitCollider in hitColliders)
-            {
-                if (hitCollider.gameObject == player.gameObject)
-                {
-                    /*player.GetComponent<Health>().TakeDamage(skillDamage);*/
-                    break;
-                }
-            }
+            /* isSkilling = true;
+             isFollowing = false;
+             isAttacking = false;
+             isDodging = false;
+
+             Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, attackRange);
+             foreach (Collider2D hitCollider in hitColliders)
+             {
+                 if (hitCollider.gameObject == player.gameObject)
+                 {
+                     *//*player.GetComponent<Health>().TakeDamage(skillDamage);*//*
+                     break;
+                 }
+             }*/
         }
 
         if (dodgePlayerAttack == 1 && !isDodging)
@@ -386,7 +495,7 @@ public class EnemyAgent : Agent
     {
         float reward = 0f;
 
-      /*  if (isAttacking && player.GetComponent<PlayerHealth>().IsDead())
+        if (isAttacking && player.GetComponent<PlayerHealth>().IsDead())
         {
             reward = 1f;
         }
@@ -409,7 +518,7 @@ public class EnemyAgent : Agent
         else
         {
             reward = -0.05f;
-        }*/
+        }
 
         return reward;
     }
@@ -444,9 +553,10 @@ public class EnemyAgent : Agent
         isSkilling = false;
         isDodging = false;
     }
+    #endregion
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position, detectionRadius);
+        //Gizmos.DrawWireSphere(transform.position, detectionRadius);
     }
 }
