@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
@@ -24,10 +25,6 @@ public class EnemyAgent : Agent
     public Transform player;
     public float detectionRadius = 10f;
     public float closeRange = 2f;
-    public float attackRange = 2f;
-    public float attackDamage = 10f;
-    public float skillDamage = 20f;
-    public float skillCooldown = 5f;
     public float dodgeCooldown = 2f;
     public float patrolRange = 10f;
     public float patrolDuration = 10f;
@@ -35,8 +32,20 @@ public class EnemyAgent : Agent
     public float rotationSpeed = 100f;
     public int facingDirection;
 
+    [Header("Attack And Skill Parameter")]
+    public float attackRange = 2f;
+    public float attackDamage = 10f;
+    public float skillDamage = 20f;
+    public float skillCooldown = 5f;
+
     public Transform firePoint;
     public GameObject bulletPrefab;
+    public LineRenderer laser;
+    public GameObject startVFX;
+    public GameObject endVFX;
+
+    private List<ParticleSystem> particles = new();
+
     #endregion
 
     #region Components
@@ -52,8 +61,6 @@ public class EnemyAgent : Agent
     private float dodgeTimer = 0f;
     private float patrolTimer = 0f;
     #endregion
-
-    private Vector3 patrolTarget;
 
     #region Check Variables
     private bool isFollowing = false;
@@ -84,6 +91,8 @@ public class EnemyAgent : Agent
     private void Start()
     {
         facingDirection = 1;
+        FillLists();
+        DisableLaser();
     }
 
     private void Update()
@@ -133,7 +142,6 @@ public class EnemyAgent : Agent
     public override void OnActionReceived(ActionBuffers actions)
     {
         int horizontalMovement = (int)actions.ContinuousActions[0];
-        //int horizontalMovement = actions.DiscreteActions[4];
         int followPlayer = actions.DiscreteActions[0];
         int attackPlayer = actions.DiscreteActions[1];
         int useSkill = actions.DiscreteActions[2];
@@ -146,7 +154,7 @@ public class EnemyAgent : Agent
         int actionIndex = ChooseAction(stateIndex);
 
         // Perform action
-        /* PerformAction(horizontalMovement, followPlayer, attackPlayer, useSkill, dodgePlayerAttack);
+        PerformAction(horizontalMovement, followPlayer, attackPlayer, useSkill, dodgePlayerAttack);
 
         // Get next state, reward, and max future Q-Value
         nextState = GetStateIndex();
@@ -155,99 +163,9 @@ public class EnemyAgent : Agent
 
         // Update Q-Table using Q-Learning algorithm
         float newQ = (1 - learningRate) * QTable[stateIndex, actionIndex] + learningRate * (reward + discountFactor * maxFutureQ);
-        QTable[stateIndex, actionIndex] = (int)newQ;*/
-
-        #region Test Action
-        // TODO : Idle Anim, Idle time
-        if (horizontalMovement == 1)
-        {
-            isGrounded = CollisionSenses.Ground;
-            isWallDetected = CollisionSenses.WallFront;
-
-            if (!isGrounded || isWallDetected)
-            {
-                anim.SetBool("movement", false);
-                Flip();
-            }
-            else
-            {
-                anim.SetBool("movement", true);
-                workspace.Set(moveSpeed * facingDirection, rb.velocity.y);
-                rb.velocity = workspace;
-            }
-
-        }
+        QTable[stateIndex, actionIndex] = (int)newQ;
 
 
-        // TODO: IDLE Anim n Time
-        if (followPlayer == 1 && !isFollowing)
-        {
-            isFollowing = true;
-            isAttacking = false;
-            isSkilling = false;
-            isDodging = false;
-        }
-
-        if (isFollowing)
-        {
-            Debug.Log("FOLLOW PLAYER");
-            Debug.Log(isFollowing);
-
-            Vector2 moveDirection = (player.position - transform.position).normalized;
-            float distance = Vector2.Distance(transform.position, player.transform.position);
-
-            if (distance < detectionRadius && distance > closeRange)
-            {
-                workspace.Set(moveDirection.x * moveSpeed, rb.velocity.y);
-                rb.velocity = workspace;
-
-                Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-            }
-            else if (distance <= attackRange)
-            {
-                isFollowing = false;
-                isAttacking = true;
-                isSkilling = false;
-                isDodging = false;
-            }
-        }
-
-        // TODO ATTACK LOGIC, ANIM ATTACK, BULLET DAMAGE DONE
-        if (attackPlayer == 1 && !isAttacking)
-        {
-            Debug.Log("Attacking Player");
-            isAttacking = true;
-            isFollowing = false;
-            isSkilling = false;
-            isDodging = false;
-
-            Shoot();
-        }
-
-        // TODO: LASER SKILL
-        if (useSkill == 1 && !isSkilling)
-        {
-            Debug.Log("Skill Used");
-
-             isSkilling = true;
-             isFollowing = false;
-             isAttacking = false;
-             isDodging = false;
-
-            
-        }
-
-        if (dodgePlayerAttack == 1 && !isDodging)
-        {
-            isDodging = true;
-            isFollowing = false;
-            isAttacking = false;
-            isSkilling = false;
-
-            rb.AddForce(new Vector2(horizontalMovement * moveSpeed * 2f, rb.velocity.y));
-        }
-        #endregion
 
         // Reset timers andflags
         if (attackPlayer == 1)
@@ -265,15 +183,6 @@ public class EnemyAgent : Agent
             dodgeTimer = dodgeCooldown;
         }
 
-        if (patrolTimer > 0f)
-        {
-            patrolTimer -= Time.deltaTime;
-        }
-        else
-        {
-            patrolTarget = transform.position + new Vector3(Random.Range(-patrolRange, patrolRange), 0f, Random.Range(-patrolRange, patrolRange));
-            patrolTimer = patrolDuration;
-        }
 
         isFollowing = false;
         isAttacking = false;
@@ -307,7 +216,7 @@ public class EnemyAgent : Agent
         }
 
         // Skill
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             discreteActionsOut[2] = 1;
         }
@@ -329,6 +238,77 @@ public class EnemyAgent : Agent
     private void Shoot()
     {
         Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+    }
+
+    IEnumerator Skill()
+    {
+
+        RaycastHit2D hit = Physics2D.Raycast(firePoint.position, firePoint.right);
+
+        if (hit)
+        {
+            Combat player = hit.transform.GetComponentInChildren<Combat>();
+            if (player != null)
+            {
+                player.Damage(skillDamage);
+            }
+
+            laser.SetPosition(0, (Vector2)firePoint.localPosition);
+            startVFX.transform.localPosition = (Vector2)firePoint.localPosition;
+
+            Vector3 newHitPointY = new Vector3(-hit.point.x, 0);
+            laser.SetPosition(1, (Vector2)newHitPointY);
+
+            endVFX.transform.localPosition = laser.GetPosition(1);
+        }
+
+        EnableLaser();
+
+        yield return new WaitForSeconds(skillTimer);
+
+        DisableLaser();
+
+    }
+
+    private void EnableLaser()
+    {
+        laser.enabled = true;
+
+        for (int i = 0; i < particles.Count; i++)
+        {
+            particles[i].Play();
+        }
+    }
+
+    private void DisableLaser()
+    {
+        laser.enabled = false;
+
+        for (int i = 0; i < particles.Count; i++)
+        {
+            particles[i].Stop();
+        }
+    }
+
+    private void FillLists()
+    {
+        for (int i = 0; i < startVFX.transform.childCount; i++)
+        {
+            var ps = startVFX.transform.GetChild(i).GetComponent<ParticleSystem>();
+            if (ps != null)
+            {
+                particles.Add(ps);
+            }
+        }
+
+        for (int i = 0; i < endVFX.transform.childCount; i++)
+        {
+            var ps = endVFX.transform.GetChild(i).GetComponent<ParticleSystem>();
+            if (ps != null)
+            {
+                particles.Add(ps);
+            }
+        }
     }
 
     private void Flip()
@@ -391,7 +371,7 @@ public class EnemyAgent : Agent
 
     private void PerformAction(int horizontalMovement, int followPlayer, int attackPlayer, int useSkill, int dodgePlayerAttack)
     {
-        
+
         // TODO : Idle Anim, Idle time
         if (horizontalMovement == 1)
         {
@@ -412,8 +392,6 @@ public class EnemyAgent : Agent
 
         }
 
-
-        // FOLLOW PLAYER LOGIC DONE
         // TODO: IDLE Anim n Time
         if (followPlayer == 1 && !isFollowing)
         {
@@ -425,9 +403,6 @@ public class EnemyAgent : Agent
 
         if (isFollowing)
         {
-            Debug.Log("FOLLOW PLAYER");
-            Debug.Log(isFollowing);
-
             Vector2 moveDirection = (player.position - transform.position).normalized;
             float distance = Vector2.Distance(transform.position, player.transform.position);
 
@@ -451,7 +426,6 @@ public class EnemyAgent : Agent
         // TODO ATTACK LOGIC, ANIM ATTACK, BULLET DAMAGE DONE
         if (attackPlayer == 1 && !isAttacking)
         {
-            Debug.Log("Attacking Player");
             isAttacking = true;
             isFollowing = false;
             isSkilling = false;
@@ -460,24 +434,15 @@ public class EnemyAgent : Agent
             Shoot();
         }
 
+        // TODO: LASER SKILL
         if (useSkill == 1 && !isSkilling)
         {
-            Debug.Log("Skill Used");
+            isSkilling = true;
+            isFollowing = false;
+            isAttacking = false;
+            isDodging = false;
 
-            /* isSkilling = true;
-             isFollowing = false;
-             isAttacking = false;
-             isDodging = false;
-
-             Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, attackRange);
-             foreach (Collider2D hitCollider in hitColliders)
-             {
-                 if (hitCollider.gameObject == player.gameObject)
-                 {
-                     *//*player.GetComponent<Health>().TakeDamage(skillDamage);*//*
-                     break;
-                 }
-             }*/
+            StartCoroutine(Skill());
         }
 
         if (dodgePlayerAttack == 1 && !isDodging)
@@ -498,10 +463,12 @@ public class EnemyAgent : Agent
         if (isAttacking && player.GetComponent<PlayerHealth>().IsDead())
         {
             reward = 1f;
+            EndEpisode();
         }
         else if (isSkilling && player.GetComponent<PlayerHealth>().IsDead())
         {
             reward = 0.5f;
+            EndEpisode();
         }
         else if (isDodging && player.GetComponent<Player>().GetIsAttacking())
         {
@@ -554,9 +521,4 @@ public class EnemyAgent : Agent
         isDodging = false;
     }
     #endregion
-
-    private void OnDrawGizmos()
-    {
-        //Gizmos.DrawWireSphere(transform.position, detectionRadius);
-    }
 }
