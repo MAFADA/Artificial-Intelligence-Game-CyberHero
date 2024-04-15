@@ -30,7 +30,7 @@ TagManager:
   - Buildings
   - Damageable
   - Weapon
-  - 
+  - Interactable
   - 
   - 
   - 
@@ -73,4 +73,7 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 3009998177
+    locked: 0
+  - name: UI
+    uniqueID: 1362992181
     locked: 0

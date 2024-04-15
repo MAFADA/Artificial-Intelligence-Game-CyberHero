@@ -81,6 +81,8 @@ public class EnemyAgent : Agent
     private float discountFactor = 0.95f;
     #endregion
 
+    private int x=12, y=5;
+
     #region Unity Callbacks
     private void Awake()
     {
@@ -108,7 +110,7 @@ public class EnemyAgent : Agent
         //SetResetParameters();
 
         // Initialize Q-Table with zeros
-        QTable = new int[12, 5];
+        QTable = new int[x, y];
         for (int i = 0; i < 12; i++)
         {
             for (int j = 0; j < 5; j++)
@@ -150,6 +152,8 @@ public class EnemyAgent : Agent
         // Convert observations to state index
         int stateIndex = GetStateIndex();
 
+        Debug.Log("State Now: "+stateIndex);
+
         // Choose action based on Q-Table
         int actionIndex = ChooseAction(stateIndex);
 
@@ -158,6 +162,7 @@ public class EnemyAgent : Agent
 
         // Get next state, reward, and max future Q-Value
         nextState = GetStateIndex();
+        Debug.Log("Next State: "+nextState);
         reward = GetReward();
         maxFutureQ = GetMaxFutureQ(nextState);
 

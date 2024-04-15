@@ -22,8 +22,8 @@ MonoBehaviour:
   wallJumpVelocity: 20
   wallJumpTime: 0.4
   wallJumpAngle: {x: 1, y: 2}
-  startOffset: {x: -0.5, y: -0.9}
-  stopOffset: {x: 1, y: 1}
+  startOffset: {x: -0.2, y: -0.6}
+  stopOffset: {x: 0.6, y: 1}
   dashCooldown: 0.5
   maxHoldTime: 1
   holdTimeScale: 0.25
@@ -32,8 +32,3 @@ MonoBehaviour:
   drag: 10
   dashEndYMultiplier: 0.2
   distanceBetweenAfterImages: 0.5
-  groundCheckRadius: 0.3
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 64
-  wallCheckDistance: 0.6
