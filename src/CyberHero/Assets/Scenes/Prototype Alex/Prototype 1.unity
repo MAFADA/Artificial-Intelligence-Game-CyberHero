@@ -66115,7 +66115,7 @@ MonoBehaviour:
       Loop: 1
     Source: {fileID: 0}
   sourcePrefab: {fileID: 9081312462959294093, guid: 1a15bad09d91bdb4d8f327f2b941413b, type: 3}
-  startupTrack: 
+  startupTrack: QuizGameMusic
 --- !u!1 &1868005567
 GameObject:
   m_ObjectHideFlags: 0
