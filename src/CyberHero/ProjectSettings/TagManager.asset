@@ -16,6 +16,7 @@ TagManager:
   - Server
   - Enemy
   - ParticleContainer
+  - Patrol Point
   layers:
   - Default
   - TransparentFX
@@ -31,7 +32,7 @@ TagManager:
   - Damageable
   - Weapon
   - Interactable
-  - 
+  - PatrolPoint
   - 
   - 
   - 

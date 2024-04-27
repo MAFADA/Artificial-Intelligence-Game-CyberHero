@@ -41,6 +41,10 @@ public class EnemyAgent : Agent
     public float rotationSpeed = 100f;
     public float maxRotationAngle = 45f;
 
+    public float cooldownAttack = 5f;
+    private float nextFireTime;
+    public Transform firePoint;
+    public GameObject bulletPrefab;
 
     public Transform leftPatrol;
     public Transform rightPatrol;
@@ -88,8 +92,8 @@ public class EnemyAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actions)
     {
-        float movement = actions.ContinuousActions[0];
-
+        int movementAction = actions.DiscreteActions[0];
+        int attackAction = actions.DiscreteActions[1];
 
         #region Movement Action
         isGrounded = CollisionSenses.Ground;
@@ -100,50 +104,105 @@ public class EnemyAgent : Agent
             anim.SetBool("movement", false);
             Flip();
         }
-        else
+        else if (movementAction == 1)
         {
             anim.SetBool("movement", true);
-            workspace.Set(movement * moveSpeed * facingDirection, rb.velocity.y);
+            workspace.Set(movementAction * moveSpeed * facingDirection, rb.velocity.y);
             rb.velocity = workspace;
         }
+        #endregion
 
-        if (Physics2D.Raycast(transform.position, Vector2.right * facingDirection, detectionRange, whatIsTargetDetection))
+        #region Detection & Following
+        if (Physics2D.OverlapCircle(transform.position,detectionRange, whatIsTargetDetection) && movementAction == 0)
         {
             isPlayerDetected = true;
             isFollowing = true;
-            SetReward(0.2f);
-        }
-
-        if (isFollowing)
-        {
 
             Vector2 moveDirection = (targetToFollow.position - transform.position).normalized;
             float distance = Vector2.Distance(transform.position, targetToFollow.position);
 
-            if (distance < detectionRange)
+            if (isFollowing && distance < detectionRange)
             {
-                Debug.Log("Following");
-
-                workspace.Set(movement * moveDirection.x * moveSpeed, rb.velocity.y);
+                workspace.Set(movementAction * moveDirection.x * moveSpeed, rb.velocity.y);
                 rb.velocity = workspace;
-                EndEpisode();
+
                 //TODO : Facing Towards Target
+                if (moveDirection.x > 0 && facingDirection < 0)
+                {
+                    // If moving right but facing left, flip
+                    Flip();
+                }
+                else if (moveDirection.x < 0 && facingDirection > 0)
+                {
+                    // If moving left but facing right, flip
+                    Flip();
+                }
+
+            }
+            AddReward(0.2f);
+        }
+        else
+        {
+            isPlayerDetected = false;
+            isFollowing = false;
+            AddReward(-0.1f);
+        }
+
+
+
+        if (Physics2D.Raycast(transform.position, Vector2.right * facingDirection, attackRange, whatIsTargetDetection))
+        {
+
+            rb.velocity = Vector2.zero;
+            isAttackingPlayer = true;
+            if (isAttackingPlayer && attackAction == 0)
+            {
+                if (Time.time >= nextFireTime)
+                {
+                    Shoot(); // TODO: Create Some time cooldown for attack.
+                    nextFireTime = Time.time + cooldownAttack;
+                }
+
             }
         }
+        else
+        {
+            isAttackingPlayer = false;
+        }
+
+
+        if (targetToFollow.GetComponentInChildren<Combat>().IsDead())
+        {
+            SetReward(10f);
+            EndEpisode();
+        }
+
         #endregion
 
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
     {
-        ActionSegment<float> continuousActions = actionsOut.ContinuousActions;
-        continuousActions[0] = Input.GetAxisRaw("Horizontal");
+        ActionSegment<int> discreteActions = actionsOut.DiscreteActions;
+
+
+        /*
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    discreteActions[1] = 0;
+                }*/
+        //TODO HEURISTIC DEBUG FOR Attack 
 
         /*    ActionSegment<int> discreteActions = actionsOut.DiscreteActions;
             if (Input.GetKeyDown(KeyCode.F))
             {
                 discreteActions[1] = 1;
             }*/
+    }
+
+    private void Shoot()
+    {
+        Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
     }
 
     private void Flip()
@@ -162,13 +221,16 @@ public class EnemyAgent : Agent
         isFollowing = false;
         isAttackingPlayer = false;
         isUsingSkill = false;
+        targetToFollow.gameObject.SetActive(true);
+        targetToFollow.transform.GetComponentInChildren<Stats>().IncreaseHealth(100);
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(transform.position, new Vector3(transform.position.x + detectionRange, transform.position.y, transform.position.z));
-        Gizmos.DrawWireSphere(transform.position, attackRange);
+        Gizmos.DrawWireSphere(transform.position, detectionRange);
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, new Vector3(transform.position.x + attackRange, transform.position.y, transform.position.z));
     }
 
 }
