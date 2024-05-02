@@ -19,7 +19,7 @@ public class DialogueController : MonoBehaviour
     int index = 1;
 
 
-    void Start()
+    void OnEnable()
     {
         charaSprites = new Queue<Sprite>();
         nameChara = new Queue<string>();

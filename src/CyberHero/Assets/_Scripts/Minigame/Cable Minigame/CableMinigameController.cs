@@ -47,7 +47,7 @@ public class CableMinigameController : MonoBehaviour
         yield return new WaitForSeconds(1);
         minigameOverPanel.SetActive(false);
         terminalPanel.SetActive(false);
-
+        //TODO: Make Transition into AMBUSH CS
     }
 
     public void wrongMove()

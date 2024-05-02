@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class GameDialogueTrigger : MonoBehaviour
 {
+    //public GameObject canvas;
     public GameDialogue[] dialogues;
 
-    void Start()
+    void OnEnable()
     {
         FindObjectOfType<DialogueController>().StartDialogue(dialogues);
     }
