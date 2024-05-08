@@ -52,6 +52,8 @@ public class MeleeEnemyAgent1 : Agent
     private bool isUsingSkill;
     #endregion
 
+    private Transform currentTransform;
+
     #region Unity Callbacks
 
     private void Awake()
@@ -59,6 +61,8 @@ public class MeleeEnemyAgent1 : Agent
         Core = GetComponentInChildren<Core>();
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        currentTransform = transform;
+
     }
 
     private void Update()
@@ -208,7 +212,7 @@ public class MeleeEnemyAgent1 : Agent
     private void ResetParameters()
     {
         facingDirection = 1;
-        transform.position = new Vector3(-21.5f, -2f, 0f);
+        transform.position = currentTransform.position;
         transform.rotation = Quaternion.identity;
         isPlayerDetected = false;
         isFollowing = false;

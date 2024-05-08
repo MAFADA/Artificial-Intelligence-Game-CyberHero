@@ -18,6 +18,8 @@ public class DialogueController : MonoBehaviour
     
     int index = 1;
 
+    public delegate void DialogueEndAction();
+    public static event DialogueEndAction OnDialogueEnd;
 
     void OnEnable()
     {
@@ -76,5 +78,7 @@ public class DialogueController : MonoBehaviour
     void EndDialogue()
     {
         animator.SetBool("isOpen", false);
+
+        OnDialogueEnd?.Invoke();
     }
 }
