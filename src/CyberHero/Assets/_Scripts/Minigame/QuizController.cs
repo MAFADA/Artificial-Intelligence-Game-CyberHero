@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class QuizController : MonoBehaviour
 {
@@ -276,7 +277,7 @@ public class QuizController : MonoBehaviour
 
     public void QuitQuiz()
     {
-
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     private void SetHighscore()
