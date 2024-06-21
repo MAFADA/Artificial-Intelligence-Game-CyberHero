@@ -1,0 +1,29 @@
+{
+    "MidBossAgent": {
+        "checkpoints": [
+            {
+                "steps": 3078,
+                "file_path": "results\\MidBossTrain\\MidBossAgent\\MidBossAgent-3078.onnx",
+                "reward": 1252.075008392334,
+                "creation_time": 1718928201.498527,
+                "auxillary_file_paths": [
+                    "results\\MidBossTrain\\MidBossAgent\\MidBossAgent-3078.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 3078,
+            "file_path": "results\\MidBossTrain\\MidBossAgent.onnx",
+            "reward": 1252.075008392334,
+            "creation_time": 1718928201.498527,
+            "auxillary_file_paths": [
+                "results\\MidBossTrain\\MidBossAgent\\MidBossAgent-3078.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.0.0",
+        "torch_version": "1.13.1+cu117"
+    }
+}

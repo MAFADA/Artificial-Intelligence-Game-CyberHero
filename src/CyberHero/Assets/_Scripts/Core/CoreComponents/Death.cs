@@ -13,10 +13,10 @@ public class Death : CoreComponent
 
     public void Die()
     {
-        foreach (var particle in deathParticles)
+      /*  foreach (var particle in deathParticles)
         {
             ParticleManager.StartParticles(particle);
-        }
+        }*/
 
         core.transform.parent.gameObject.SetActive(false);
     }

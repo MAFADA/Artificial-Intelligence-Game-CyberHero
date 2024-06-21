@@ -15,7 +15,7 @@ public class DialogueController : MonoBehaviour
     public Queue<Sprite> charaSprites;
     public Queue<string> nameChara;
     public Queue<string> sentences;
-    
+
     int index = 1;
 
     public delegate void DialogueEndAction();
