@@ -17,6 +17,7 @@ TagManager:
   - Enemy
   - ParticleContainer
   - Patrol Point
+  - Object
   layers:
   - Default
   - TransparentFX
@@ -33,7 +34,7 @@ TagManager:
   - Weapon
   - Interactable
   - PatrolPoint
-  - 
+  - Object
   - 
   - 
   - 

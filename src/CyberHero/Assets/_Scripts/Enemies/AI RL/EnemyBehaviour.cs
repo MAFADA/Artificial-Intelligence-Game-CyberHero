@@ -4,9 +4,7 @@ using System.Runtime.Remoting.Messaging;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
-using UnityEditor.Build;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class EnemyAgent : Agent
 {

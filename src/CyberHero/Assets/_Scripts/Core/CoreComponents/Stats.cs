@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Stats : CoreComponent
 {
@@ -10,6 +11,19 @@ public class Stats : CoreComponent
 
     [SerializeField] private float maxHealth;
     private float currentHealth;
+
+    [SerializeField] private float barrierHealth;
+    private float currentBarrierHealth;
+    private bool barrierActive = false;
+
+    public bool BarrierActive { get => barrierActive; set => barrierActive = value; }
+    public float CurrentBarrierHealth { get => currentBarrierHealth; set => currentBarrierHealth = value; }
+    public float BarrierHealth { get => barrierHealth; }
+    public float CurrentHealth { get => currentHealth; }
+
+    /*
+    public Image healthBar;
+    public Image barrierBar;*/
 
     protected override void Awake()
     {
@@ -20,16 +34,30 @@ public class Stats : CoreComponent
 
     public void DecreaseHealth(float amount)
     {
-        currentHealth -= amount;
-
-        if (currentHealth <= 0)
+        if (barrierActive)
         {
-            currentHealth = 0;
-
-            OnHealthZero?.Invoke();
-
-            Debug.Log("health is zero");
+            currentBarrierHealth -= amount;
+            if (currentBarrierHealth <= 0)
+            {
+                barrierActive = false;
+               /* barrierBar.gameObject.SetActive(false);*/
+            }
+            /*UpdateBarrierBar();*/
         }
+        else
+        {
+            currentHealth -= amount;
+
+            if (currentHealth <= 0)
+            {
+                currentHealth = 0;
+
+                OnHealthZero?.Invoke();
+
+                Debug.Log("health is zero");
+            }
+        }
+        
     }
 
     public void IncreaseHealth(float amount)
@@ -37,8 +65,24 @@ public class Stats : CoreComponent
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
     }
 
+   /* private void UpdateHealthBar()
+    {
+        healthBar.fillAmount = currentHealth / maxHealth;
+    }
+
+    private void UpdateBarrierBar()
+    {
+        barrierBar.fillAmount = currentBarrierHealth / barrierHealth;
+    }*/
+
+
     public bool GetIsDead()
     {
         return currentHealth <= 0;
+    }
+
+    public float GetHealth()
+    {
+        return currentHealth;
     }
 }

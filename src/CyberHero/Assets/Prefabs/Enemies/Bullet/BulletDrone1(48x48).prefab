@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 8912815976303764919}
   - component: {fileID: 9116969901289486674}
   - component: {fileID: 8414141071407295578}
-  - component: {fileID: 3802806344964993873}
   - component: {fileID: 4884694060343737834}
+  - component: {fileID: 7010105512904301269}
   m_Layer: 0
   m_Name: BulletDrone1(48x48)
   m_TagString: Untagged
@@ -114,8 +114,24 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!68 &3802806344964993873
-EdgeCollider2D:
+--- !u!114 &4884694060343737834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2417007320536157557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01115965b877f0c4ba45698f0fa6fa9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 20
+  damage: 20
+  rb: {fileID: 8414141071407295578}
+  laserImpact: {fileID: 313696956425381805, guid: ff171b3e7f9cf214e873320459b5c9fe, type: 3}
+--- !u!70 &7010105512904301269
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -146,28 +162,6 @@ EdgeCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_EdgeRadius: 0
-  m_Points:
-  - {x: -5.7308164, y: 0.026546715}
-  - {x: 4.29731, y: -0.07963895}
-  m_AdjacentStartPoint: {x: 0, y: 0}
-  m_AdjacentEndPoint: {x: 0, y: 0}
-  m_UseAdjacentStartPoint: 0
-  m_UseAdjacentEndPoint: 0
---- !u!114 &4884694060343737834
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2417007320536157557}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01115965b877f0c4ba45698f0fa6fa9d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 20
-  damage: 20
-  rb: {fileID: 8414141071407295578}
-  laserImpact: {fileID: 313696956425381805, guid: ff171b3e7f9cf214e873320459b5c9fe, type: 3}
+  m_Offset: {x: 1.174335, y: -0.041895505}
+  m_Size: {x: 6.6532288, y: 1.3688643}
+  m_Direction: 1
