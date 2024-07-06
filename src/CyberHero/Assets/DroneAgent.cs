@@ -40,6 +40,8 @@ public class DroneAgent : Agent
     public float laserRange = 5.0f;
     public GameObject laserPrefab;
     public Transform firepoint;
+    private bool canShoot = true;
+    private float shootCooldown = 2.0f;
 
     private bool isGrounded = true;
     private bool isWallDetected;
@@ -109,25 +111,26 @@ public class DroneAgent : Agent
         sensor.AddObservation(isGrounded);
         sensor.AddObservation(isWallDetected);
         sensor.AddObservation(facingRight);
+        sensor.AddObservation(canShoot);
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
-        float reward = -0.01f; // Small negative reward to encourage quicker completion
         currentAction = actions[actionBuffers.DiscreteActions[0]];
         isGrounded = CollisionSenses.Ground;
         isWallDetected = CollisionSenses.WallFront;
+        float reward = -0.01f; // Small negative reward to encourage quicker completion
 
         switch (currentAction)
         {
             case "MoveLeft":
-                MoveLeft();
+                reward = MoveLeft();
                 break;
             case "MoveRight":
-                MoveRight();
+                reward = MoveRight();
                 break;
             case "ShootLaser":
-                ShootLaser();
+                reward = ShootLaser();
                 break;
         }
 
@@ -157,13 +160,13 @@ public class DroneAgent : Agent
             discreteActions[0] = 1;
         }
 
-        else if (Input.GetKey(KeyCode.Space))
+        else if (Input.GetKey(KeyCode.F))
         {
             discreteActions[0] = 2;
         }
     }
 
-    private void MoveLeft()
+    private float MoveLeft()
     {
         if (facingRight)
         {
@@ -172,9 +175,13 @@ public class DroneAgent : Agent
         workspace.Set(moveSpeed * facingDirection, rb.velocity.y);
         rb.velocity = workspace;
         CheckForFlip();
+
+        // Reward for moving closer to the player
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        return distanceToPlayer < laserRange ? 0.1f : -0.1f;
     }
 
-    private void MoveRight()
+    private float MoveRight()
     {
         if (!facingRight)
         {
@@ -184,6 +191,33 @@ public class DroneAgent : Agent
         rb.velocity = workspace;
         CheckForFlip();
 
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        return distanceToPlayer < laserRange ? 0.1f : -0.1f;
+    }
+
+    private float ShootLaser()
+    {
+        if (!canShoot) return -1.0f;
+
+        if (Physics2D.Raycast(firepoint.position, Vector2.right * facingDirection, detectionRange, playerLayer))
+        {
+            isPlayerDetected = true;
+            Instantiate(laserPrefab, firepoint.position, firepoint.rotation);
+            canShoot = false;
+            Invoke(nameof(ResetShoot), shootCooldown);
+            return 1.0f;
+        }
+        else
+        {
+            isPlayerDetected = false;
+
+            return -0.5f;
+        }
+    }
+
+    private void ResetShoot()
+    {
+        canShoot = true;
     }
 
     private void CheckForFlip()
@@ -205,22 +239,7 @@ public class DroneAgent : Agent
 
 
 
-    private void ShootLaser()
-    {
-        if (Physics2D.Raycast(firepoint.position, Vector2.right * facingDirection, detectionRange, playerLayer))
-        {
-            isPlayerDetected = true;
-            Instantiate(laserPrefab, firepoint.position, firepoint.rotation);
-            AddReward(1.0f);
-        }
-        else
-        {
-            isPlayerDetected = false;
-
-            AddReward(-0.5f);
-        }
-    }
-
+ 
     private float GetMaxQ(string state)
     {
         float maxQ = float.MinValue;
