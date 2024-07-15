@@ -21,18 +21,26 @@ public class DroneAgent : Agent
     private CollisionSenses collisionSenses;
     #endregion
 
+    #region Components
     private Animator anim;
     private Rigidbody2D rb;
     private Vector2 workspace;
     private int facingDirection = 1;
+    #endregion
 
-    // Q-Learning parameters
+    #region Q-Learning Parameters
     private Dictionary<string, float> qTable = new Dictionary<string, float>();
     private float learningRate = 0.1f;
     private float discountFactor = 0.99f;
     private float explorationRate = 0.1f;
 
-    // Enemy drone parameters
+    private string currentState;
+    private string nextState;
+    private string currentAction;
+    private string[] actions = new string[] { "MoveLeft", "MoveRight", "ShootLaser" };
+    #endregion
+
+    #region Enemy Parameters
     public Transform player;
     public LayerMask playerLayer;
     public float moveSpeed = 2.0f;
@@ -47,20 +55,26 @@ public class DroneAgent : Agent
     private bool isWallDetected;
     private bool facingRight = true;
     private bool isPlayerDetected;
+    #endregion
 
-
-    private string currentState;
-    private string nextState;
-    private string currentAction;
-
+    #region Log Training
     private StreamWriter logWriter;
     private string logFilePath = "Assets/Logs/qLearningLog.txt";
     private string qTableFilePath = "Assets/Logs/qTable.txt";
 
-    // Actions
-    private string[] actions = new string[] { "MoveLeft", "MoveRight", "ShootLaser" };
+    private List<string> actionLog = new List<string>();
+    private string actionLogFilePath = "Assets/Logs/DroneActionLog.txt";
 
-    // State representation (for simplicity, we use a string)
+    private List<float> distanceLog = new List<float>();
+    private string distanceLogFilePath = "Assets/Logs/DroneDistanceLog.txt";
+
+    private List<string> qValueLog = new List<string>();
+    private string qValueLogFilePath = "Assets/Logs/QValueLog.txt";
+
+    private List<float> rewardLog = new List<float>();
+    private string rewardLogFilePath = "Assets/Logs/RewardLog.txt";
+    #endregion
+
     private string GetState()
     {
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
@@ -78,6 +92,7 @@ public class DroneAgent : Agent
         }
     }
 
+    #region Unity Callbacks
     private void Awake()
     {
         Core = GetComponentInChildren<Core>();
@@ -92,7 +107,9 @@ public class DroneAgent : Agent
     {
         Core.LogicUpdate();
     }
+    #endregion
 
+    #region MLAgent Functions
     public override void OnEpisodeBegin()
     {
         // Reset drone position
@@ -103,20 +120,40 @@ public class DroneAgent : Agent
         currentState = GetState();
 
         logWriter.WriteLine("New Episode Started");
+
+        SaveActionLog();
+        actionLog.Clear();
+
+        SaveDistanceLog();
+        distanceLog.Clear();
+
+        SaveQValueLog();
+        qValueLog.Clear();
+
+        SaveRewardLog();
+        rewardLog.Clear();
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation(Vector3.Distance(transform.position, player.position));
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        sensor.AddObservation(distanceToPlayer);
+        distanceLog.Add(distanceToPlayer);
+
         sensor.AddObservation(isGrounded);
         sensor.AddObservation(isWallDetected);
         sensor.AddObservation(facingRight);
         sensor.AddObservation(canShoot);
+
+
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
         currentAction = actions[actionBuffers.DiscreteActions[0]];
+        actionLog.Add(currentAction);
+
+
         isGrounded = CollisionSenses.Ground;
         isWallDetected = CollisionSenses.WallFront;
         float reward = -0.01f; // Small negative reward to encourage quicker completion
@@ -142,10 +179,15 @@ public class DroneAgent : Agent
         qTable[$"{currentState}_{currentAction}"] = newQ;
 
         logWriter.WriteLine($"State: {currentState}, Action: {currentAction}, Reward: {reward}, New Q-value: {newQ}");
+       
+        string qValueEntry = $"{currentState}_{currentAction}: {newQ}";
+        qValueLog.Add(qValueEntry);
 
         currentState = nextState;
 
         AddReward(reward);
+
+        rewardLog.Add(GetCumulativeReward());
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -165,34 +207,38 @@ public class DroneAgent : Agent
             discreteActions[0] = 2;
         }
     }
+    #endregion
 
+    #region Other Functions
     private float MoveLeft()
     {
+        CheckForFlip();
         if (facingRight)
         {
             Flip();
         }
         workspace.Set(moveSpeed * facingDirection, rb.velocity.y);
         rb.velocity = workspace;
-        CheckForFlip();
+      
 
         // Reward for moving closer to the player
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-        return distanceToPlayer < laserRange ? 0.1f : -0.1f;
+        return distanceToPlayer < detectionRange ? 0.1f : -0.1f;
     }
 
     private float MoveRight()
     {
+        CheckForFlip();
         if (!facingRight)
         {
             Flip();
         }
         workspace.Set(moveSpeed * facingDirection, rb.velocity.y);
         rb.velocity = workspace;
-        CheckForFlip();
+     
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-        return distanceToPlayer < laserRange ? 0.1f : -0.1f;
+        return distanceToPlayer < detectionRange ? 0.1f : -0.1f;
     }
 
     private float ShootLaser()
@@ -237,9 +283,6 @@ public class DroneAgent : Agent
         transform.Rotate(.0f, 180.0f, .0f);
     }
 
-
-
- 
     private float GetMaxQ(string state)
     {
         float maxQ = float.MinValue;
@@ -266,6 +309,10 @@ public class DroneAgent : Agent
         Gizmos.DrawLine(transform.position, new Vector3(transform.position.x + laserRange, transform.position.y, transform.position.z));
     }
 
+    #endregion
+
+    #region LogFunctions
+
     void OnDestroy()
     {
         logWriter.Close();
@@ -283,4 +330,49 @@ public class DroneAgent : Agent
             }
         }
     }
+
+    private void SaveActionLog()
+    {
+        using (StreamWriter writer = new StreamWriter(actionLogFilePath, true))
+        {
+            foreach (var action in actionLog)
+            {
+                writer.WriteLine(action);
+            }
+        }
+    }
+
+    private void SaveDistanceLog()
+    {
+        using (StreamWriter writer = new StreamWriter(distanceLogFilePath, true))
+        {
+            foreach (var distance in distanceLog)
+            {
+                writer.WriteLine(distance);
+            }
+        }
+    }
+
+    private void SaveQValueLog()
+    {
+        using (StreamWriter writer = new StreamWriter(qValueLogFilePath, true))
+        {
+            foreach (var qValue in qValueLog)
+            {
+                writer.WriteLine(qValue);
+            }
+        }
+    }
+
+    private void SaveRewardLog()
+    {
+        using (StreamWriter writer = new StreamWriter(rewardLogFilePath, true))
+        {
+            foreach (var reward in rewardLog)
+            {
+                writer.WriteLine(reward);
+            }
+        }
+    }
+    #endregion
 }
