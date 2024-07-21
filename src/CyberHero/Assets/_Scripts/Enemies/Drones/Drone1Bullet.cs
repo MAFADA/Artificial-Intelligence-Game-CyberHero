@@ -30,8 +30,6 @@ public class Drone1Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log(collision.name);
-
         if (collision.CompareTag("Player"))
         {
             Combat player = collision.GetComponentInChildren<Combat>();
@@ -45,7 +43,7 @@ public class Drone1Bullet : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Enemy")) // Misalnya, kamu bisa menambahkan tag seperti Wall atau Enemy
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Enemy"))
         {
             Instantiate(laserImpact, transform.position, transform.rotation);
             Destroy(gameObject);

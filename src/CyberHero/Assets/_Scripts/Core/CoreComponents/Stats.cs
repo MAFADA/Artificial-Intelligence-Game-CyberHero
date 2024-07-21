@@ -20,6 +20,7 @@ public class Stats : CoreComponent
     public float CurrentBarrierHealth { get => currentBarrierHealth; set => currentBarrierHealth = value; }
     public float BarrierHealth { get => barrierHealth; }
     public float CurrentHealth { get => currentHealth; }
+    public float MaxHealth { get => maxHealth; }
 
     /*
     public Image healthBar;
