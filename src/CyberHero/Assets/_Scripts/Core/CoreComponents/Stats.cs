@@ -22,9 +22,6 @@ public class Stats : CoreComponent
     public float CurrentHealth { get => currentHealth; }
     public float MaxHealth { get => maxHealth; }
 
-    /*
-    public Image healthBar;
-    public Image barrierBar;*/
 
     protected override void Awake()
     {
@@ -41,9 +38,7 @@ public class Stats : CoreComponent
             if (currentBarrierHealth <= 0)
             {
                 barrierActive = false;
-               /* barrierBar.gameObject.SetActive(false);*/
             }
-            /*UpdateBarrierBar();*/
         }
         else
         {

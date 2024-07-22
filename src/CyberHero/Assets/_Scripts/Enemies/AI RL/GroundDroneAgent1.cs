@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
@@ -93,10 +94,9 @@ public class GroundDroneAgent1 : Agent
     #region MLAgent Functions
     public override void OnEpisodeBegin()
     {
-        transform.position = new Vector3(Random.Range(-5f, 5f), transform.position.y, transform.position.z);
-
         qTable.Clear();
         currentState = GetState();
+
     }
 
     public override void CollectObservations(VectorSensor sensor)

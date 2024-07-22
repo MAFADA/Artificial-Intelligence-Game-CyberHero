@@ -194,7 +194,7 @@ public class MidBossAgent1 : Agent
     private float Follow()
     {
         isFollowing = true;
-        float distanceToPlayer = Vector2.Distance(transform.position, player.position);
+        distanceToPlayer = Vector2.Distance(transform.position, player.position);
         Vector2 directionToPlayer = (player.position - transform.position).normalized;
 
         if (distanceToPlayer > stopDistance)

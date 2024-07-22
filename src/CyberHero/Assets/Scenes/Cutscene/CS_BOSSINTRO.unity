@@ -1398,6 +1398,8 @@ PlayableDirector:
     value: {fileID: 1015822860}
   - key: {fileID: 3099991099129612597, guid: 30cb81cf65e6a084d85326def7505a69, type: 2}
     value: {fileID: 1209121645}
+  - key: {fileID: -445243920196463833, guid: 30cb81cf65e6a084d85326def7505a69, type: 2}
+    value: {fileID: 1867843232}
   m_ExposedReferences:
     m_References: []
 --- !u!4 &616431862
@@ -2360,7 +2362,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.7916667, y: 1.4166666}
+    oldSize: {x: 1.0416666, y: 1.3333334}
     newSize: {x: 1.1875, y: 2.125}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

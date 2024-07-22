@@ -6,9 +6,11 @@ using UnityEngine.UI;
 
 public class FirewallBypass : MonoBehaviour
 {
-    public Button[] packetButtons; // Tombol untuk paket data
-    public TextMeshProUGUI firewallRulesText; // UI Text untuk menampilkan aturan firewall
-    public TextMeshProUGUI resultText; // UI Text untuk menampilkan hasil permainan
+    public Button[] packetButtons; 
+    public TextMeshProUGUI firewallRulesText;
+    public TextMeshProUGUI resultText;
+
+    public Button closeTerminalButton;
 
     private List<string> firewallRules = new List<string>()
     {
@@ -32,20 +34,20 @@ public class FirewallBypass : MonoBehaviour
 
     void SetupGame()
     {
-        // Reset hasil permainan
+        
         resultText.text = "";
 
-        // Tampilkan aturan firewall
+     
         firewallRulesText.text = "Firewall Rules:\n";
         foreach (string rule in firewallRules)
         {
             firewallRulesText.text += rule + "\n";
         }
 
-        // Tampilkan paket data ke tombol
+        
         for (int i = 0; i < packetButtons.Length; i++)
         {
-            int index = i; // Capture variable for closure
+            int index = i;
             packetButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = packetData[i];
             packetButtons[i].onClick.AddListener(() => SelectPacket(index));
         }
@@ -53,7 +55,7 @@ public class FirewallBypass : MonoBehaviour
 
     void SelectPacket(int index)
     {
-        // Logika untuk memeriksa apakah paket data mematuhi aturan firewall
+        
         string selectedPacket = packetData[index];
 
         bool isBlocked = false;
@@ -73,6 +75,7 @@ public class FirewallBypass : MonoBehaviour
         else
         {
             resultText.text = "Packet Bypassed Firewall!";
+            closeTerminalButton.enabled = true;
         }
     }
 }

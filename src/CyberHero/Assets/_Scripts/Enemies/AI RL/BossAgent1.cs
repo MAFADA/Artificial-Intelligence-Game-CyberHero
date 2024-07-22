@@ -76,7 +76,6 @@ public class BossAgent1 : Agent
     private bool canUseSkill = true;
     private List<ParticleSystem> particlesSkill = new();
 
-    [Header("Barrier parameters")]
     #endregion
 
     #region Agent Check Variables
@@ -481,19 +480,6 @@ public class BossAgent1 : Agent
         }
         return maxQ;
     }
-
-    /*private void RaycastDebugger(Vector2 rayDirection)
-    {
-        if (distanceToPlayer > laserRange)
-        {
-            Debug.DrawRay(raycast.position, rayDirection * detectionRange, Color.red);
-        }
-        else if (laserRange > distanceToPlayer)
-        {
-            Debug.DrawRay(raycast.position, rayDirection * detectionRange, Color.green);
-        }
-    }*/
-
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
