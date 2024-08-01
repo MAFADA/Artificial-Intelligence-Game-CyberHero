@@ -231,7 +231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6463f2f86cf0dd040b11f8f277d41862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 250
   barrierHealth: 0
 --- !u!1 &3084864974256460746
 GameObject:
@@ -396,7 +396,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 4108094959599232211}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 00cd00059e71dcc49b2df87cc663eb8d, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

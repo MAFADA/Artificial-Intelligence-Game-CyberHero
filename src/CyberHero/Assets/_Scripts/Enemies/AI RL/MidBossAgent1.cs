@@ -1,3 +1,4 @@
+using Cinemachine.Utility;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.MLAgents;
@@ -60,13 +61,14 @@ public class MidBossAgent1 : Agent
     public Transform firepoint;
     public float laserRange = 5.0f;
     private bool canShoot = true;
-    private float shootCooldown = 2.0f;
+    public float shootCooldown = 2.0f;
 
     [Header("Skill parameters")]
     public Transform firePointSkill;
     public LineRenderer lineRendererSkill;
     public float skillCooldown = 10f;
     public int skillDamage = 20;
+    public float skillDuration = 1f;
     public GameObject startVFXSkill;
     public GameObject endVFXSkill;
     private bool canUseSkill = true;
@@ -113,8 +115,6 @@ public class MidBossAgent1 : Agent
     #region MLAgent Functions
     public override void OnEpisodeBegin()
     {
-        transform.position = new Vector3(Random.Range(-5f, 5f), transform.position.y, transform.position.z);
-
         qTable.Clear();
         currentState = GetState();
     }
@@ -229,15 +229,13 @@ public class MidBossAgent1 : Agent
 
     private float ShootLaser()
     {
-        Debug.Log("Commencing Shoot Laser");
         if (!canShoot) return -1.0f;
 
-        Collider2D laserDetection = Physics2D.OverlapCircle(transform.position, detectionRange, playerLayer);
+        Collider2D laserDetection = Physics2D.OverlapCircle(transform.position, laserRange, playerLayer);
 
         if (laserDetection != null && laserDetection.CompareTag("Player"))
         {
             isAttackingPlayer = true;
-            Debug.Log("Player Detected");
             anim.SetBool("Attack", true);
 
             isPlayerDetected = true;
@@ -248,8 +246,6 @@ public class MidBossAgent1 : Agent
         }
         else
         {
-            Debug.Log("Player Not Detected");
-
             isAttackingPlayer = false;
 
             isPlayerDetected = false;
@@ -339,11 +335,9 @@ public class MidBossAgent1 : Agent
 
     private IEnumerator SkillCoroutine(System.Action<float> callback)
     {
-        Debug.Log("Commencing Skill Laser");
         Vector2 rayDirection = facingRight ? Vector2.right : Vector2.left;
         if (Physics2D.Raycast(attackDetector.position, rayDirection, laserRange, playerLayer))
         {
-            Debug.Log("Player Detected");
 
             rb.velocity = Vector2.zero;
             isAttackingPlayer = true;
@@ -356,7 +350,6 @@ public class MidBossAgent1 : Agent
         }
         else
         {
-            Debug.Log("Player Not Detected");
 
             DisableLaserSkill();
             anim.SetBool("isAttacking", false);
@@ -370,7 +363,7 @@ public class MidBossAgent1 : Agent
     {
         canUseSkill = false;
         SkillLaser();
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(skillDuration);
         DisableLaserSkill();
         yield return new WaitForSeconds(skillCooldown);
         canUseSkill = true;
@@ -419,18 +412,6 @@ public class MidBossAgent1 : Agent
         return maxQ;
     }
 
-    /*private void RaycastDebugger(Vector2 rayDirection)
-    {
-        if (distanceToPlayer > laserRange)
-        {
-            Debug.DrawRay(raycast.position, rayDirection * detectionRange, Color.red);
-        }
-        else if (laserRange > distanceToPlayer)
-        {
-            Debug.DrawRay(raycast.position, rayDirection * detectionRange, Color.green);
-        }
-    }*/
-
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
@@ -439,6 +420,10 @@ public class MidBossAgent1 : Agent
         Gizmos.DrawWireSphere(transform.position, stopDistance);
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(transform.position, laserRange);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(attackDetector.position, new Vector3(attackDetector.position.x + laserRange,attackDetector.position.y, attackDetector.position.z));
     }
     #endregion
 }

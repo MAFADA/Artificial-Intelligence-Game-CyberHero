@@ -42,7 +42,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Prototype Alex/Alex_5 Ambush MidBoss.unity
     guid: 999d3442e4060814f96f70f122e118ca
   - enabled: 1
-    path: Assets/Scenes/Cutscene/CS_BOSSINTRO.unity
+    path: Assets/Scenes/Cutscene/7_CS_BOSSINTRO.unity
     guid: 22446fb6a4a9433449f97d0a9454ea00
   - enabled: 1
     path: Assets/Scenes/Prototype Alex/Alex_6 Boss Fight.unity

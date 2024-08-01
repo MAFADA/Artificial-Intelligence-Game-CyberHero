@@ -8,17 +8,10 @@ public class MainMenu : MonoBehaviour
 {
     [SerializeField] Animator transition;
     [SerializeField] float transitionTime = 1f;
-    public UnityEvent OnEscKeyDown;
 
     public void StartGame()
     {
         LoadNextScene();
-    }
-
-    private void Update() {
-        if (Input.GetKeyDown(KeyCode.Escape)){
-            OnEscKeyDown.Invoke();
-        }
     }
 
     public void LoadAlexStageLevel()
@@ -33,16 +26,21 @@ public class MainMenu : MonoBehaviour
 
     public void LoadMainMenuLevel()
     {
-        SceneManager.LoadScene("MainMenu");
+        StartCoroutine(LoadScene(0));
     }
 
     IEnumerator LoadScene(int levelIndex)
     {
         transition.SetTrigger("Start");
 
-        yield return new WaitForSeconds(transitionTime);
+        yield return new WaitForSecondsRealtime(transitionTime);
 
-        SceneManager.LoadScene(sceneBuildIndex: levelIndex);
+        SceneManager.LoadScene(levelIndex);
+    }
+
+    public void Restart()
+    {
+        StartCoroutine(LoadScene(SceneManager.GetActiveScene().buildIndex));
     }
 
     public void Quit()

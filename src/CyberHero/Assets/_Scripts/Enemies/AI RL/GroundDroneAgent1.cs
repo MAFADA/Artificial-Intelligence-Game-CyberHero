@@ -218,6 +218,7 @@ public class GroundDroneAgent1 : Agent
     {
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
         Vector2 directionToPlayer = (player.position - transform.position).normalized;
+        Player statePlayer = player.GetComponent<Player>();
 
         if (distanceToPlayer > stopDistance)
         {
@@ -238,7 +239,7 @@ public class GroundDroneAgent1 : Agent
             /*float shootReward = ShootLaser();
             return 0.05f + shootReward;*/
         }
-        else if (distanceToPlayer < fleeDistance)
+        else if (distanceToPlayer < fleeDistance && statePlayer.GetIsAttackingState())
         {
             anim.SetBool("Movement", true);
 

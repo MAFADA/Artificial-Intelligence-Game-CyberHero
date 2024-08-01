@@ -50,7 +50,7 @@ public class Stats : CoreComponent
 
                 OnHealthZero?.Invoke();
 
-                Debug.Log("health is zero");
+                
             }
         }
         

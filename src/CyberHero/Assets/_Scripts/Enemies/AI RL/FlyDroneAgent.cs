@@ -27,7 +27,6 @@ public class FlyDroneAgent : Agent
     private int facingDirection = 1;
     #endregion
 
-
     #region Q-Learning Parameters
 
     private Dictionary<string, float> qTable = new Dictionary<string, float>();
@@ -95,8 +94,6 @@ public class FlyDroneAgent : Agent
     #region MLAgent Functions
     public override void OnEpisodeBegin()
     {
-        transform.position = new Vector3(Random.Range(-5f, 5f), transform.position.y, transform.position.z);
-
         qTable.Clear();
         currentState = GetState();
     }

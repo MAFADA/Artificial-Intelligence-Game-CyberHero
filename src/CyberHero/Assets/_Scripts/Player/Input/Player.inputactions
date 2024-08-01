@@ -60,9 +60,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "SecondaryAttack",
+                    "name": "MenuButton",
                     "type": "Button",
-                    "id": "d6d16cf5-7c92-47e9-b2d5-a8b60b411adb",
+                    "id": "7de73e09-8368-4647-a865-f7034bfa637e",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -182,12 +182,12 @@
                 },
                 {
                     "name": "",
-                    "id": "3a59e8bb-c2d6-4601-ab1b-32b00225d3b9",
-                    "path": "<Mouse>/rightButton",
+                    "id": "18b26442-97d4-4c53-a8fb-bedfe5e0dd4a",
+                    "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "SecondaryAttack",
+                    "action": "MenuButton",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

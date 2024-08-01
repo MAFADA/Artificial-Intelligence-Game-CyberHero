@@ -75,7 +75,8 @@ public class FirewallBypass : MonoBehaviour
         else
         {
             resultText.text = "Packet Bypassed Firewall!";
-            closeTerminalButton.enabled = true;
+            closeTerminalButton.gameObject.SetActive(true);
+            Time.timeScale = 1f;
         }
     }
 }

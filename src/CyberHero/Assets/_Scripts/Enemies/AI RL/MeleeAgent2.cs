@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
-using UnityEditor.Timeline.Actions;
 using UnityEngine;
 
 public class MeleeAgent2 : Agent
@@ -100,8 +99,6 @@ public class MeleeAgent2 : Agent
     #region MLAgent Functions
     public override void OnEpisodeBegin()
     {
-        transform.position = new Vector3(Random.Range(-5f, 5f), transform.position.y, transform.position.z);
-
         qTable.Clear();
         currentState = GetState();
     }

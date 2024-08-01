@@ -407,7 +407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6463f2f86cf0dd040b11f8f277d41862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 120
+  maxHealth: 150
   barrierHealth: 0
 --- !u!1 &3684071945815920510
 GameObject:
@@ -548,7 +548,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 5
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 00cd00059e71dcc49b2df87cc663eb8d, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -568,7 +568,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 4483094168982114256}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 00cd00059e71dcc49b2df87cc663eb8d, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -647,7 +647,7 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: aefd23121f83d0c478942817a4c94ccb, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: 4ed306a44e96a2748b476de24f68f3bf, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 2
   m_BehaviorName: GroundDroneAgent

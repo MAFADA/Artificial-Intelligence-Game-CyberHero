@@ -105,7 +105,7 @@ public class Player : MonoBehaviour
 
     #endregion
 
-    public bool GetIsAttacking()
+    public bool GetIsAttackingState()
     {
         return PrimaryAttackState.IsAttacking;
     }
